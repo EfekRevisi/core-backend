@@ -1,7 +1,7 @@
   
 ###########################################################################
 ## Make file
-## @author: Irfan Andriansyah <irfan@99.co>
+## @author: Irfan Andriansyah <irfanandriansyah10@gmail.com>
 ## @since: 2020.04.10
 ###########################################################################
 
