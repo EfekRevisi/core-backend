@@ -1,5 +1,5 @@
 # graphql server backend
-learn how to create graphql server
+learn how to create graphql server using go
 
 # Requirement
 - go
