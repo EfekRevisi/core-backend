@@ -1,0 +1,15 @@
+os: linux
+dist: focal
+language: go
+go:
+  - 1.15.5
+  
+before_install:
+  - env GO111MODULE=on go mod vendor
+
+install:
+  - sudo apt-get update
+  - go get -u golang.org/x/lint/golint
+
+script:
+  - make lint
