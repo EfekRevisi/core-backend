@@ -1,17 +1,29 @@
 package main
 
 import (
-	"fmt"
+	sqlite "core-backend/pkg/sqlite"
+	"net/http"
 
-	model "core-backend/pkg/model"
+	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	var employee = model.User{
-		ID:          1,
-		FirstName:   "First name",
-		LastName:    "Last Name",
-		BadgeNumber: 1000,
+func cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
+		c.Next()
 	}
-	fmt.Printf(employee.FirstName)
+}
+
+func main() {
+	r := gin.Default()
+	r.Use(cors())
+
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "hais",
+		})
+	})
+
+	sqlite.MigrateDatabase()
+	r.Run()
 }
