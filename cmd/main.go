@@ -1,7 +1,7 @@
 package main
 
 import (
-	sqlite "core-backend/pkg/sqlite"
+	"core-backend/pkg/repository/sqlite"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -6,6 +6,7 @@ import "core-backend/pkg/models"
 type UserRepository interface {
 	GetUserByID(ID string) (*models.User, error)
 	GetAllUser() ([]models.User, error)
-	UpdateUserByID(ID string, payload models.User) (*models.User, error)
+	Insert(payload models.User) (*models.User, error)
+	UpdateUserByID(ID string, user *models.User, payload models.UpdateUserInput) (bool, error)
 	DeleteByID(ID string) (bool, error)
 }

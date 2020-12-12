@@ -11,6 +11,7 @@ type userRepositoryImpl struct {
 	db *gorm.DB
 }
 
+// InitUserRepository - for initialize user repository
 func InitUserRepository(db *gorm.DB) repository.UserRepository {
 	return &userRepositoryImpl{
 		db: db,
@@ -19,8 +20,8 @@ func InitUserRepository(db *gorm.DB) repository.UserRepository {
 
 func (u *userRepositoryImpl) GetUserByID(ID string) (*models.User, error) {
 	user := &models.User{}
-	if error := u.db.First(&user, ID).Error; error != nil {
-		return nil, error
+	if err := u.db.First(&user, ID).Error; err != nil {
+		return nil, err
 	}
 
 	return user, nil
@@ -28,39 +29,52 @@ func (u *userRepositoryImpl) GetUserByID(ID string) (*models.User, error) {
 
 func (u *userRepositoryImpl) GetAllUser() ([]models.User, error) {
 	var users []models.User
-	if error := u.db.Find(&users).Error; error != nil {
-		return nil, error
+	if err := u.db.Find(&users).Error; err != nil {
+		return nil, err
 	}
 
 	return users, nil
 }
 
-func (u *userRepositoryImpl) UpdateUserByID(ID string, payload models.User) (*models.User, error) {
-	user := &models.User{}
-
-	if error := u.db.First(&user, ID).Error; error != nil {
-		return nil, error
+func (u *userRepositoryImpl) Insert(payload models.User) (*models.User, error) {
+	user := &models.User{
+		ID:        payload.ID,
+		FirstName: payload.FirstName,
+		LastName:  payload.LastName,
 	}
 
-	user.FirstName = payload.FirstName
-	user.LastName = payload.LastName
-
-	if error := u.db.Save(&user).Error; error != nil {
-		return nil, error
+	if err := u.db.Create(&user).Error; err != nil {
+		return nil, err
 	}
 
 	return user, nil
 }
 
+func (u *userRepositoryImpl) UpdateUserByID(
+	ID string,
+	user *models.User,
+	payload models.UpdateUserInput,
+) (bool, error) {
+
+	user.FirstName = payload.Firstname
+	user.LastName = payload.Lastname
+
+	if err := u.db.Save(&user).Error; err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (u *userRepositoryImpl) DeleteByID(ID string) (bool, error) {
 	user := &models.User{}
 
-	if error := u.db.First(&user, ID).Error; error != nil {
-		return false, error
+	if err := u.db.First(&user, ID).Error; err != nil {
+		return false, err
 	}
 
-	if error := u.db.Delete(&user).Error; error != nil {
-		return false, error
+	if err := u.db.Delete(&user).Error; err != nil {
+		return false, err
 	}
 
 	return true, nil
